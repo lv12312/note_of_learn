@@ -12,11 +12,11 @@ Morphia作为MongoDB轻量级ORM框架，提供了类型安全的、支持运行
 ###3、使用###
 建议使用Maven
 
-	<dependency>
-			<groupId>org.mongodb.morphia</groupId>
-			<artifactId>morphia</artifactId>
-			<version>${morphia.version}</version>
-	</dependency>
+	`<dependency>`<br/>
+			`<groupId>org.mongodb.morphia</groupId>`<br/>
+			`<artifactId>morphia</artifactId>`<br/>
+			`<version>${morphia.version}</version>`<br/>
+	`</dependency>`<br/>
 
 代码示例：
 

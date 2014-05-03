@@ -69,7 +69,7 @@
 讲述SpringMVC肯定不会少了`org.springframework.web.servlet.DispatcherServlet`
 根据源代码讲述的，这个类是HTTP请求handler/controller中心调度器，将Web请求派发给注册好的处理器进行处理。Servlet是非常灵活的：可以在各种流程下面使用，通过安装合适的适配器。提供了以下区别于其他请求驱动的MVC框架的诸多功能：
 
-![SpringMVC图片](http://www.rritw.com/uploads/allimg/2013-06-07/57ea9e7edeebd5ee2ec0cf27313c5fb6__2.JPG)
+![SpringMVC图片](https://raw.githubusercontent.com/lv12312/note_of_learn/master/spring%20is%20coming/springmvc.JPG)
 
 * 基于JavaBean配置机制
 * 可以使用任何基于 `HandlerMapping` 的实现，默认的是 `BeanNameUrlHandlerMapping` 和 `DefaultAnnotationHandlerMapping`，HandlerMapping对象可以作为Bean在Servlet应用上下文中注册，实现了HandlerMapping接口

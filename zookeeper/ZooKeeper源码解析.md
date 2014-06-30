@@ -46,6 +46,30 @@ zkServer.cmd脚本
 
 启动过程如下：
 
-* 1. 解析zoo.cfg配置文件填充QuorumPeerConfig类
-* 2. 创建DatadirCleanupManager类，定期清理历史任务，默认情况下不清理。
-* 3. 如果没有配置配置文件或者config.servers.size()=0的情况下，启动单机版的ZooKeeper, 否则创建QuorumPeer类，启动该QuorumPeer线程，然后等待。
+* 1. 解析zoo.cfg配置文件填充QuorumPeerConfig对象
+* 2. 创建DatadirCleanupManager对象，定期清理历史任务，默认情况下不清理。
+* 3. 如果没有配置配置文件或者config.servers.size()=0的情况下，启动单机版的ZooKeeper, 否则创建QuorumPeer(法定成员)对象，启动QuorumPeer线程，然后join该线程。
+
+其中第3步中：
+	
+	...
+	ServerCnxnFactory cnxnFactory = ServerCnxnFactory.createFactory();
+			cnxnFactory.configure(config.getClientPortAddress(),
+					config.getMaxClientCnxns());
+	//提供一个服务连接事务处理器(Server Connection Transaction)
+	//可以通过启动参数来指定使用哪种事务处理器参数为——zookeeper.serverCnxnFactory
+	//默认使用NIOServerCnxnFactory，还提供了NettyServerCnxnFactory备选
+	//默认客户端连接数为60
+	//NIOServerCnxnFactory.java
+	...
+	public void configure(InetSocketAddress addr, int maxcc) throws IOException {
+		configureSaslLogin();//启动之前配置登陆的认证协议，Simple Authentication and Security Layer(SASL)
+
+		//配置注册线程，NIO方式
+		...
+	}
+	...
+
+
+QuorumPeer类：管理法定成员协议，服务器有三种状态：1、领导者选举状态；2、跟随者状态，3、领导者状态。
+

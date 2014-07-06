@@ -2,9 +2,9 @@
 
 ###1、脚本
 
-先看启动脚本，和windows的启动脚本相比，linux下的显然比较强大。
+先看启动脚本：
 
-windows：
+windows版本：
 
 zkEvn.cmd脚本
 
@@ -71,5 +71,10 @@ zkServer.cmd脚本
 	...
 
 
-QuorumPeer类：管理法定成员协议，服务器有三种状态：1、领导者选举状态；2、跟随者状态，3、领导者状态。
+QuorumPeer类：管理法定成员协议，服务器有4种状态：
+
+1. 寻找状态(LOOKING)；进行Leader选举时的状态。
+2. 跟随者状态(FOLLOWING)；
+3. 领导者状态(LEADING)；
+4. 观察者状态(OBSERVING)。
 

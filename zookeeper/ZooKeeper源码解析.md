@@ -56,7 +56,7 @@ zkServer.cmd脚本
 	ServerCnxnFactory cnxnFactory = ServerCnxnFactory.createFactory();
 			cnxnFactory.configure(config.getClientPortAddress(),
 					config.getMaxClientCnxns());
-	//提供一个服务连接事务处理器(Server Connection Transaction)
+	//提供一个服务连接事务处理器(Server Connection Transaction)处理客户端请求
 	//可以通过启动参数来指定使用哪种事务处理器参数为——zookeeper.serverCnxnFactory
 	//默认使用NIOServerCnxnFactory，还提供了NettyServerCnxnFactory备选
 	//默认客户端连接数为60
@@ -73,8 +73,31 @@ zkServer.cmd脚本
 
 QuorumPeer类：管理法定成员协议，服务器有4种状态：
 
-1. 寻找状态(LOOKING)；进行Leader选举时的状态。
-2. 跟随者状态(FOLLOWING)；
-3. 领导者状态(LEADING)；
-4. 观察者状态(OBSERVING)。
+1. 寻找状态(LOOKING)；每台服务器将会开始选举Leader, 初始化时都假定自身是Leader。
+2. 跟随者状态(FOLLOWING)；该服务器将会从Leader同步数据，复制事务。
+3. 领导者状态(LEADING)；该服务器处理请求，然后将其派发给Follower，主要的Follower必须要在接受该请求前记录日志。
+4. 观察者状态(OBSERVING)(后面会讲到)。
 
+该类会设置一个数据报的Socket来接收来自目前Leader的响应，响应由以下形式构成：
+
+* int xid;
+* long myid;
+* long leader_id;
+* long leader_zxid;
+
+请求只由xid构成。
+	
+	QuorumPeerMain.java
+	...
+	quorumPeer.start();
+	...
+
+	QuorumPeer.java
+	...
+	@Override
+	public synchronized void start() {
+		loadDataBase();//载入snapshot数据
+		cnxnFactory.start();//客户端连接开始接受请求
+		startLeaderElection();//开始执行Leader选举，已经过时，可以不用关注了
+		super.start();
+	}

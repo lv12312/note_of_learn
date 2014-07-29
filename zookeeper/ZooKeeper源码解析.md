@@ -1,4 +1,4 @@
-##ZooKeeper源码浅析
+##ZooKeeper源码浅析之一
 
 ###1、脚本
 
@@ -85,7 +85,7 @@ QuorumPeer类：管理法定成员协议，服务器有4种状态：
 * long leader_id;
 * long leader_zxid;
 
-请求只由xid构成。
+Leader请求只由xid构成。
 	
 	QuorumPeerMain.java
 	...
@@ -101,3 +101,26 @@ QuorumPeer类：管理法定成员协议，服务器有4种状态：
 		startLeaderElection();//开始执行Leader选举，已经过时，可以不用关注了
 		super.start();
 	}
+
+
+	...
+	@Override
+	public void run() {
+		setName("QuorumPeer" + "[myid=" + getId() + "]"
+				+ cnxnFactory.getLocalAddress());
+
+		//1、注册MBean，代码省略...
+		
+		//2、主循环，根据Peer的状态来决定要做的事
+		/*
+			 * Main loop
+			 */
+			while (running) {
+				switch(getPeerStart()){
+					case LOOKING://(1) 查找状态，进行Leader选举
+					case OBSERVING://(2) 观察状态
+					case FOLLOWING://(3) 跟随者状态
+					case LEADING://(4) 领导者状态
+				}
+			}
+

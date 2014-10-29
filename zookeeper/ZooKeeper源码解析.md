@@ -86,7 +86,7 @@ zkServer.cmd脚本
 			//配置存在，且配置的服务器大于0
 			runFromConfig(config);
 		} else {
-			//配置长度小于0在或者配置的服务器为0，走单机模式
+			//没有配置参数在或者配置的服务器为0，走单机模式运行
 			LOG.warn("Either no config or no quorum defined in config, running "
 					+ " in standalone mode");
 			// there is only server in the quorum -- run as standalone

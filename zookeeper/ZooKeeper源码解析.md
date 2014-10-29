@@ -101,8 +101,7 @@ zkServer.cmd脚本
 * 3. 如果没有配置配置文件或者config.servers.size()=0的情况下，启动单机版的ZooKeeper, 否则创建QuorumPeer(法定成员)对象，启动QuorumPeer线程，然后join该线程。
 
 其中第3步中：
-	
-	...
+```Java
 	ServerCnxnFactory cnxnFactory = ServerCnxnFactory.createFactory();
 			cnxnFactory.configure(config.getClientPortAddress(),
 					config.getMaxClientCnxns());
@@ -120,7 +119,7 @@ zkServer.cmd脚本
 	}
 	...
 
-
+```
 QuorumPeer类：管理法定成员协议，服务器有4种状态：
 
 1. 寻找状态(LOOKING)；每台服务器将会开始选举Leader, 初始化时都假定自身是Leader。

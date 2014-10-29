@@ -83,10 +83,10 @@ zkServer.cmd脚本
 		purgeMgr.start();
 
 		if (args.length == 1 && config.servers.size() > 0) {
-			//配置存在，从配置读取参数并启动
+			//配置存在，且配置的服务器大于0
 			runFromConfig(config);
 		} else {
-			//配置不存在或者配置的服务器为0，走单机模式
+			//配置长度小于0在或者配置的服务器为0，走单机模式
 			LOG.warn("Either no config or no quorum defined in config, running "
 					+ " in standalone mode");
 			// there is only server in the quorum -- run as standalone

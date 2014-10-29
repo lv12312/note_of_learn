@@ -43,8 +43,58 @@ zkServer.cmd脚本
 从启动脚本上看，ZooKeeper的启动是执行QuorumPeerMain类的main方法。
 
 ###2、代码启动
+启动过程的主方法如下：
 
-启动过程如下：
+```Java
+   public static void main(String[] args) {
+        QuorumPeerMain main = new QuorumPeerMain();
+        try {
+            //初始化+执行
+            main.initializeAndRun(args);
+        } catch (IllegalArgumentException e) {
+            LOG.error("Invalid arguments, exiting abnormally", e);
+            LOG.info(USAGE);
+            System.err.println(USAGE);
+            System.exit(2);
+        } catch (ConfigException e) {
+            LOG.error("Invalid config, exiting abnormally", e);
+            System.err.println("Invalid config, exiting abnormally");
+            System.exit(2);
+        } catch (Exception e) {
+            LOG.error("Unexpected exception, exiting abnormally", e);
+            System.exit(1);
+        }
+        LOG.info("Exiting normally");
+        System.exit(0);
+    }
+    
+    protected void initializeAndRun(String[] args) throws ConfigException,
+			IOException {
+		/** 读取文件，然后填充配置对象 */
+		QuorumPeerConfig config = new QuorumPeerConfig();
+		if (args.length == 1) {
+			config.parse(args[0]);
+		}
+
+		//启动定时清理任务
+		DatadirCleanupManager purgeMgr = new DatadirCleanupManager(
+				config.getDataDir(), config.getDataLogDir(),
+				config.getSnapRetainCount(), config.getPurgeInterval());
+		purgeMgr.start();
+
+		if (args.length == 1 && config.servers.size() > 0) {
+			//配置存在，从配置读取参数并启动
+			runFromConfig(config);
+		} else {
+			//配置不存在，走单机模式
+			LOG.warn("Either no config or no quorum defined in config, running "
+					+ " in standalone mode");
+			// there is only server in the quorum -- run as standalone
+			ZooKeeperServerMain.main(args);
+		}
+	}
+    ...
+```
 
 * 1. 解析zoo.cfg配置文件填充QuorumPeerConfig对象
 * 2. 创建DatadirCleanupManager对象，定期清理历史任务，默认情况下不清理。

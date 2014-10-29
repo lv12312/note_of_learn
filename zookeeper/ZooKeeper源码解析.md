@@ -135,8 +135,8 @@ QuorumPeer类：管理法定成员协议，服务器有4种状态：
 * long leader_zxid;
 
 Leader请求只由xid构成。
-	
-	QuorumPeerMain.java
+```Java
+	///QuorumPeerMain.java
 	...
 	quorumPeer.start();
 	...
@@ -173,3 +173,4 @@ Leader请求只由xid构成。
 				}
 			}
 
+```

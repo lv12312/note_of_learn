@@ -1,3 +1,3 @@
 ## Note Of Learning.
 
-#### Good good study, day day up!!!
+#### Good good study, day day up!!! Go 
